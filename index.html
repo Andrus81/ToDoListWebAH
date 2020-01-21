@@ -18,19 +18,21 @@
 </head>
 
 <body>
+
     <div id="app"  style="height: 100% !important;">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-success">
             <a class="navbar-brand" href="#">DyTaBo</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
-          
+
+          <!--HOME-->
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
                   <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                 </li>
-               
+          <!--Task-->     
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Task
@@ -41,15 +43,15 @@
                     <a class="dropdown-item" href="#">Delete</a>
                   </div>
                 </li>
+           <!--USER-->
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Users
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" >Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                    <a class="dropdown-item"  data-toggle="modal" data-target="#addUserModal" >Add</a>
+                    <a class="dropdown-item" href="#">Edit</a>
+                    <a class="dropdown-item" href="#">Delete</a>
                   </div>
                 </li>
                
@@ -60,74 +62,79 @@
               </form>
             </div>
           </nav>
-
-        <div class="container-fluid  ">
+      
+        <div class="container-fluid">
         <div class="row" >
+          <!--List Tasks-->
             <div class="col-2  col-lg-offset-1 col-md-offset-1 col-sm-offset-1   hidden-md-down " style="height: 100px!important;"> <!--Column: lisk of task unsigned-->
-
+             
                 <div class="card text-center " style="background-color: lightgrey !important;">
-                    <div class="card-header text-primary">
+                    <div class="card-header text-success">
                       List Tasks
                     </div>
                     <div class="card-body w-100 p-3" style="padding: 0.25rem !important;" v-for="task in listTask">
-                      <a href="#" class="btn btn-primary">{{task.name}}</a>
+                      
+                      <a v-on:click="DeleteTask(task._id)"><img src="images/trash.png" width="30" height="30"></img></a>
+                      <a href="#" class="btn btn-success" v-on:click="showInfo(task._id)">{{task.name}}</a>
                     </div>
-
                     
                 </div>
                   
             </div>
+           <!--List Open-->
             <div class="col-2 col-lg-offset-1 col-md-offset-1 col-sm-offset-1   hidden-md-down" style="height: 100% !important;">
                 <div class="card text-center" style="background-color: lightgrey  !important;">
-                    <div class="card-header text-primary">
+                    <div class="card-header text-success">
                       Open
                     </div>
                     <div class="card-body" style="padding: 0.25rem !important;" v-for="taskOpen in listTaskOpen" >
-                      <a href="#" class="btn btn-primary">{{taskOpen.name}}</a>
+                      <a v-on:click="DeleteTask(taskOpen._id)"><img src="images/trash.png" width="30" height="30"></img></a>
+                      <a href="#" class="btn btn-success">{{taskOpen.name}}</a>
                     </div>
                     
                   </div>
             
             </div>
+           <!--List In-Progress-->
             <div class="col-2 col-lg-offset-1 col-md-offset-1 col-sm-offset-1   hidden-md-down" style="height: 100% !important;" > <!--Column: lisk of task unsigned-->
 
                 <div class="card text-center" style="background-color: lightgrey !important;">
-                    <div class="card-header text-primary">
+                    <div class="card-header text-success">
                         In-Progress
                     </div>
                     <div class="card-body" style="padding: 0.25rem !important;" v-for="TaskProgress in listTaskProgress"> 
-                      <a href="#" class="btn btn-primary">{{TaskProgress.name}}</a>
+                      <a v-on:click="DeleteTask(TaskProgress._id)"><img src="images/trash.png" width="30" height="30"></img></a>
+                      <a href="#" class="btn btn-success">{{TaskProgress.name}}</a>
                     </div>
-                </div>
-          
-                    
-                    
-                   
-
+                </div>     
             </div>
+             <!--List Completed-->
             <div class="col-2 col-lg-offset-1 col-md-offset-1 col-sm-offset-1   hidden-md-down" style="height: 100% !important;">
                 <div class="card text-center" style="background-color: lightgrey !important;">
-                    <div class="card-header text-primary">
+                    <div class="card-header text-success">
                     Completed
                     </div>
                     <div class="card-body" style="padding: 0.25rem !important;" v-for="TaskComplete in listTaskCompleted">
-                      <a href="#" class="btn btn-primary">{{TaskComplete.name}}</a>
+                      <a v-on:click="DeleteTask(TaskComplete._id)"><img src="images/trash.png" width="30" height="30"></img></a>
+                      <a href="#" class="btn btn-success">{{TaskComplete.name}}</a>
                     </div>
                     
                   </div>
-            
             </div>
+             <!--List Archived-->
             <div class="col-2 col-lg-offset-1 col-md-offset-1 col-sm-offset-1   hidden-md-down" style="height: 100% !important;">
                 <div class="card text-center" style="background-color: lightgrey !important;">
-                    <div class="card-header text-primary">
+                    <div class="card-header text-success">
                         Archived
                     </div>
                     <div class="card-body" style="padding: 0.25rem !important;" v-for="TaskArchived in listTaskArchived">
-                      <a href="#" class="btn btn-primary">{{TaskArchived.name}}</a>
+                      <a v-on:click="DeleteTask(TaskArchived._id)"><img src="images/trash.png" width="30" height="30"></img></a>
+                      <a href="#" class="btn btn-success">{{TaskArchived.name}}</a>
                     </div>
                   </div>
                     
             </div>
+
             <div class="col-2 col-lg-offset-1 col-md-offset-1 col-sm-offset-1   hidden-md-down" style="height: 100% !important;">
                 <div class="card text-center" style="background-color: lightgrey !important;">
                     <div class="card-header text-primary">
@@ -135,53 +142,55 @@
                     </div>
                     <div class="card-body" style="padding: 0.25rem !important;">
                         <form>
-                            
+                            <!--User select-->
                             <div class="form-group">
                               <label for="exampleFormControlSelect1">User select</label>
-                              <select class="form-control" id="exampleFormControlSelect1" >
-                                
-                                <option value="listUser.id"  v-for="Users in listUser">{{Users.name}}</option>
+                              <select class="form-control" id="exampleFormControlSelect1" v-model="inputUser.selectUser">
+                                <option value="" disabled selected>Select User</option>
+                                <option v-bind:value="user._id"  v-for="user in listUser">{{user.name}}</option>
                                 
                                
                               </select>
                             </div>
+                             <!--Task select-->
                             <div class="form-group">
                               <label for="exampleFormControlSelect2">Task select</label>
-                              <select multiple class="form-control" id="exampleFormControlSelect2">
-                                <option value="list.id"  v-for="ListAllTask in listAllTask">{{ListAllTask.name}}</option>
+                              <select  class="form-control" id="exampleFormControlSelect2" v-model="inputUser.selectTask">
+                                <option value="" disabled selected>Select Task</option>
+                                <option v-bind:value="task._id"  v-for="task in listAllTask">{{task.name}}</option>
                                 
                               </select>
                             </div>
-                            <button type="button" class="btn btn-primary btn-lg">Assign</button>
+                            <button type="button" class="btn btn-success btn-lg" v-on:click="AssingUserTask()">Assign</button>
                           </form>
                     </div>
                    
             </div>
             
+            </div>
         </div>
-        </div>
+      </div>
 
-        <!-- Modals -->
-        
-        
+        <!-- Modals Task --> 
         <div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="addTaskModal" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Add task</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
+
               <div class="modal-body">
                 <form>
                   <div class="form-group">
-                    <label for="recipient-name" class="col-form-label">Recipient:</label>
+                    <label for="recipient-name" class="col-form-label">Name:</label>
                     <input type="text" class="form-control" id="name" v-model="inputTask.name" placeholder="Name task">
                   </div>
                   <div class="form-group">
-                    <label for="message-text" class="col-form-label">Message:</label>
-                    <textarea class="form-control" id="description" placeholder="Description..." v-model="inputTask.description"></textarea>
+                    <label for="message-text" class="col-form-label">Description:</label>
+                    <textarea class="form-control"  placeholder="Description..." v-model="inputTask.description"></textarea>
                   </div>
                 </form>
               </div>
@@ -192,10 +201,41 @@
             </div>
           </div>
         </div>
-
-
-        <!-- END Modals-->
+       <!-- END Modals Task-->
+       <!-- Modals User --> 
+       <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Add task</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Name:</label>
+                  <input type="text" class="form-control"  v-model="inputUser.name" placeholder="Name user">
+                </div>
+                <div class="form-group">
+                  <label for="message-text" class="col-form-label">Description:</label>
+                  <textarea class="form-control" id="description" placeholder="Description..." v-model="inputUser.description"></textarea>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" v-on:click="AddUser()">Add User</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+    
+       <!-- END Modals User --> 
+      
     <script src="js/jquery.min.js"></script>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
