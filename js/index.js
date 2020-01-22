@@ -3,8 +3,9 @@ new Vue({
     el:'#app',
     created:function(){
         this.GetListTasks(),
-        this.GetListUser()
-        
+        this.GetListUser(),
+        this.GetListState()
+        //this.showInfo()
     },
     data:{
         inputTask:{
@@ -15,11 +16,17 @@ new Vue({
         descriptionTask:'',
         userIdTask:'',
         username:'',
-       // result: '',
+        statename: '',
         inputUser:{
             name:'',
             description:'',
             selectUser:'',
+            selectTask:''
+        },
+        inputState:{
+            name:'',
+            description:'',
+            selectState:'',
             selectTask:''
         },
         listAllTask:[],
@@ -28,7 +35,8 @@ new Vue({
         listTaskProgress:[],
         listTaskCompleted:[],
         listTaskArchived:[],
-        listUser:[]
+        listUser:[],
+        listState:[]
     },
     methods:{
         
@@ -48,6 +56,12 @@ new Vue({
                 this.listUser=  response.data; 
 
             }); 
+        },
+        GetListState: function(){
+            axios.get(Api+"State").then(response =>{
+                this.listState=  response.data; 
+
+            });
         },
         AddTask: function(){
             axios.post(Api+"Task",{name:this.inputTask.name,description:this.inputTask.description}).then(response =>{
@@ -126,8 +140,16 @@ new Vue({
                 swal("Error assign task", err.response.data.Data[0], "error");
             });
         },
-        showInfo: function(id){
-            axios.get(Api+"Task?id="+id).then(response =>{
+        AssingStateTask: function(){   
+
+            axios.put(Api+"Task/"+this.inputState.selectTask,{state:this.inputState.selectState}).then(response =>{
+                swal("task", response.data, "success");
+            }).catch(err=>{
+                swal("Error assign task", err.response.data.Data[0], "error");
+            });
+        },
+      /*  showInfo: function(id){
+            axios.get(Api+"Task/"+_id).then(response =>{
                 this.nameTask=  response.data[0].name; 
                 this.descriptionTask=  response.data[0].name; 
                 this.userIdTask=  response.data[0].name; 
@@ -137,7 +159,7 @@ new Vue({
                 this.username=  response.data[0].name;                 
             }); 
 
-        }
+        }*/
 
 
     }
