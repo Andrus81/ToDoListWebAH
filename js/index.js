@@ -4,8 +4,8 @@ new Vue({
     created:function(){
         this.GetListTasks(),
         this.GetListUser(),
-        this.GetListState()
-        //this.showInfo()
+        this.GetListState(),
+        this.showInfo()
     },
     data:{
         inputTask:{
@@ -148,21 +148,19 @@ new Vue({
                 swal("Error assign task", err.response.data.Data[0], "error");
             });
         },
-      /*  showInfo: function(id){
-            axios.get(Api+"Task/"+_id).then(response =>{
+     showInfo: function(_id){
+            axios.get(Api+"Task?id="+_id).then(response =>{
                 this.nameTask=  response.data[0].name; 
-                this.descriptionTask=  response.data[0].name; 
-                this.userIdTask=  response.data[0].name; 
+                this.descriptionTask=  response.data[0].description; 
+                this.userIdTask=  response.data[0].userid; 
             }); 
-
-            axios.get(Api+"User?id="+this.userIdTask).then(response =>{
+            
+          axios.get(Api+"User?id="+this.userIdTask).then(response =>{
                 this.username=  response.data[0].name;                 
-            }); 
-
-        }*/
-
+            });
+            
+        } 
 
     }
-   
 });
 
